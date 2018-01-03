@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="digital.dao.BoardDao">
+	<resultMap type="board" id="boardMap">
+		<id column="bdno" property="boardNo" />
+		<result column="bmno" property="boardTypeNO" />
+		<result column="bdtype" property="boardType" />
+		<result column="bdwriter" property="boardWriter" />
+		<result column="bdsubject" property="boardSubject" />
+		<result column="bdcontent" property="boardContent" />
+		<result column="bddtm" property="boardDate" />
+		<result column="bdudate" property="boardUpdateDate" />
+		<result column="bd" property="boardUpdateDate" />
+		<result column="bdhit" property="boardHit" />
+		<result column="delchk" property="boardHit" />
+		<collection property="boardFileList">
+		  <result column="bdfile" property="boardfileList" />
+		</collection>
+	</resultMap>
+
+	<select id="boardList" resultMap="boardMap" parameterType="map">
+		<!-- SELECT bdno,bdtype,bdwriter,bdsubject,bddtm,bdhit -->
+		SELECT *
+		FROM board ORDER BY bdno DESC
+		LIMIT #{start}, #{end}
+	</select>
+
+	<select id="boardCount" resultType="int" parameterType="board">
+		SELECT COUNT(*) FROM board
+	</select>
+
+	<select id="boardSelectOne" resultMap="boardMap" parameterType="int">
+		SELECT bdno,bdtype,bdwriter,bdsubject,bdcontent,bddtm,bdhit
+		FROM board
+		WHERE bdno=#{boardNo}
+	</select>
+    
+	<insert id="insert" parameterType="board">
+		INSERT INTO board(bdno,bdtype,bdsubject,bdwriter,bdcontent, bdhit, bddtm)
+		VALUES(#{boardNo},#{boardType}, #{boardSubject},#{boardWriter},#{boardContent},#{boardHit},now())
+	</insert>
+
+	<update id="update" parameterType="board">
+		UPDATE board SET
+		bdtitle=#{boardTitle},
+		bdcontent=#{boardContent},
+		bddtm=now()
+		WHERE bdno=#{boardNo}
+	</update>
+    
+    <update id="increaseHit" parameterType="int">
+        UPDATE board SET bdhit = bdhit + 1
+        WHERE bdno = #{bdno}
+    </update>
+    
+	<delete id="delete" parameterType="int">
+		DELETE FROM board WHERE bdno=#{boardNo}
+	</delete>
+</mapper>

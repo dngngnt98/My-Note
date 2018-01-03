@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'http://repo.spring.io/snapshot' }
+        maven { url 'http://repo.spring.io/milestone' }
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.BUILD-SNAPSHOT'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+jar {
+    baseName = 'myproject'
+    version =  '0.0.1-SNAPSHOT'
+}
+
+repositories { //의존 라이브러리를 다운 받기 위해 사용할 서버
+    jcenter()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+}
+
+dependencies { // 다운로드 받을 의존 라이브러리 목록 
+    // compile => 빌드(컴파일, JAR 파일 생성등)할 때 사용할 라이브러리
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.apache.tomcat.embed:tomcat-embed-jasper")
+    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+    //compile('org.springframework.boot:spring-boot-starter-jdbc')
+    compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.0")
+    compile("org.springframework.boot:spring-boot-starter-mail")
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.43'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
+    // testCompile => 테스트할 때 사용할 라이브러리
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+     // AWS IoT 라이브러리
+    compile group: 'com.amazonaws', name: 'aws-iot-device-sdk-java', version: '1.1.1'
+    
+    // AWS IoT 예제 
+    compile group: 'com.amazonaws', name: 'aws-iot-device-sdk-java-samples', version: '1.1.1'
+    // csv 파일
+    compile 'com.opencsv:opencsv:4.1'
+}
+
+compileJava { // 자바 컴파일러에게 전달하는 정보
+  options.encoding = 'UTF-8' // 자바 소스 파일의 인코딩 정보
+  sourceCompatibility = '1.8' // 소스 코드의 자바 버전
+}
+
+bootRun {
+  main = 'digita.WebApplication'
+}
+
+
